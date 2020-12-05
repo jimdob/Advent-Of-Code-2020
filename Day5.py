@@ -5,12 +5,7 @@ import math
 with open('Day5input.txt') as f:
     lines = f.read().splitlines() #read lines from txt into list
 
-print(len(lines))
-print(max(lines, key=len))
-print(min(lines, key=len))
-print(lines[0])
-
-#test passes
+#boarding passes for testing
 '''
 FBFBBFFRLR
 BFFFBBFRRR: row 70, column 7, seat ID 567.
@@ -18,30 +13,37 @@ FFFBBBFRRR: row 14, column 7, seat ID 119.
 BBFFBBFRLL: row 102, column 4, seat ID 820.
 '''
 
-
 def decodePass(code):
     rowDown, rowUp = 0, 127
     colDown, colUp = 0, 7
-    print(rowDown, rowUp)
     for c in code:
         if c == 'F': 
             rowUp = math.floor(rowUp - ((rowUp - rowDown) / 2))
-            print(c,rowDown,rowUp)
         if c == 'B':
             rowDown = math.ceil(rowDown + ((rowUp - rowDown) / 2))
-            print(c,rowDown, rowUp)
         if c == 'L':
             colUp = math.floor(colUp - ((colUp - colDown) / 2))
-            print(c,colDown,colUp)
         if c == 'R':
             colDown = math.ceil(colUp - ((colUp - colDown)) / 2)
-            print(c,colUp,colDown)
     row,col = rowDown,colDown
     return row * 8 + col
 
-#simplify code
+def findMissingSeat(lst):
+    return [x for x in range(lst[0], lst[-1]+1) if x not in lst][0]
+
+#make list of seat IDs from list of boarding passes, sort by ascending values
+lst = []
+for code in lines:
+    codeID = decodePass(code)
+    lst.append(codeID)
+lst.sort()
 
 
-print(decodePass('FBFBBFFRLR'))
+print('Part 1: Highest Seat ID: ', lst[-1])
+print('Part 2: Your Seat: ',findMissingSeat(lst))
+
+
+#simplify code. Formulas to variables?
+
 
     
